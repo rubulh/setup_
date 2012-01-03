@@ -109,7 +109,7 @@ function functionpage($ifexception=0)
     {
       echo "\n\n\n\n\n\n\n----ERROR ENCOUNTERED ==----------\n\n\n";
     }
-  $thestringtowrite="<?php\n".'$THEMYSLHOSTNAME'."=\"$entered_host_name\";".'$THEMYSQLUSERNAME'."=\"$entered_mysql_username\";".'$THEMYSQLPASSWORD'."=\"$entered_mysql_password\";".'$THEMYSQLDBNAME'."=\"$entered_db_name\";".'$THEMYSQLTABLENAME'."=\"$entered_table_name\";\n?>";
+  $thestringtowrite="<?php\n".'$SET_THEMYSLHOSTNAME'."=\"$entered_host_name\";".'$SET_THEMYSQLUSERNAME'."=\"$entered_mysql_username\";".'$SET_THEMYSQLPASSWORD'."=\"$entered_mysql_password\";".'$SET_THEMYSQLDBNAME'."=\"$entered_db_name\";".'$SET_THEMYSQLTABLENAME'."=\"$entered_table_name\";\n?>";
   $writtenstring=fwrite($filehandle,$thestringtowrite);
   $fileclosed=fclose($filehandle);;
   echo "FILE SUCCESSFULLY WROTE!!...NOW EXITING\n\n";

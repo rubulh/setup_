@@ -12,7 +12,7 @@ function SET_checklogin($USERNAME,$PASS)
 {
   $USERNAME=mysql_real_escape_string($USERNAME);
   $HASHEDPASS=mysql_real_escape_string(md5(mysql_real_escape_string($PASS)));
-  $query_checklogin=mysql_query("SELECT * FROM $SET_THELOGINTABLE WHERE NAME='$USERNAME' AND PASSWORD='$HASHEDPASS'");
+  $query_checklogin=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLE WHERE NAME='$USERNAME' AND PASSWORD='$HASHEDPASS'");
   $answer_checklogin=mysql_fetch_array($query_checklogin);
   $ansagain_checklogin=mysql_fetch_array($query_checklogin);
   if(($ansagain_checklogin))
