@@ -1,0 +1,3 @@
+1.the username and the password was allowed by the checklogin script but the entry for the username and password was not found in the table by the login unction
+2.the login function could not update the database parameters in the first attempt to update the database after the user was logged in 
+3.seems like most of it went well on the login function but the setcookie variables either or both of them is giving false;
