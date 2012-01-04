@@ -22,7 +22,7 @@ function SET_login($NAME,$PASS,$CHECKED)
 	$answer_all_details=mysql_fetch_array($query_all_details);
 	if(!$answer_all_details)
 	  {
-	    error_log("[[[[[[[SET]>>>the SET_checklogin script allowed the user access to the SET_login but no entry corressponding to the NAME and PASS ($NAME,$PASS) was found in the SET_THEMYSQLLOGINTABLEE");
+	    error_log("[[[[[[[SET]>>>the SET_checklogin script allowed the user access to the SET_login but no entry corressponding to the NAME and PASS ($NAME,$PASS) was found in the SET_THEMYSQLLOGINTABLE");
 	    return false;
 	    whisk(1);
 	    exit(1);
@@ -37,7 +37,7 @@ function SET_login($NAME,$PASS,$CHECKED)
 	$cookie_expiry_timestamp=$SET_COOKIEEXPIRY+$thexurrenttimestamp;
 	$THESESSIONID=session_id();
 	{
-	  $query_update_database=mysql_query("UPDATE $SET_MYSQLLOGINTABLE SET 'LOGINTIMESTAMP'='$thecurrenttimestamp','LASTTIMESTAMP'='$thecurrenttimestamp','AUTHKEY'='$extracted_authkey','BASE'='$base_main','SALT'='$salt','COOKIEEXPIRY'='$cookie_expiry_timestamp','LOGGED'='1','SESSIONID'='$THESESSIONID' WHERE USERID='$extracted_user_id'");
+	  $query_update_database=mysql_query("UPDATE $SET_THEMYSQLLOGINTABLE SET 'LOGINTIMESTAMP'='$thecurrenttimestamp','LASTTIMESTAMP'='$thecurrenttimestamp','AUTHKEY'='$extracted_authkey','BASE'='$base_main','SALT'='$salt','COOKIEEXPIRY'='$cookie_expiry_timestamp','LOGGED'='1','SESSIONID'='$THESESSIONID' WHERE USERID='$extracted_user_id'");
 	  $answer_update_database=mysql_affected_rows();
 	  if(!$answer_update_database)
 	    {
@@ -48,11 +48,11 @@ function SET_login($NAME,$PASS,$CHECKED)
 	    }
 	}
       }
-      $_SESSION['userid']=$extracted_user_id;
       $_SESSION['authkey']=$hashedextracted_authkey;
       $cookie1=setcookie("authkey",$hashedextracted_authkey,$SET_COOKIEEXPIRY+$thecurrenttimestamp);
       $cookie2=setcookie("base",$base,$SET_COOKIEEXPIRY+$thecurrenttimestamp);
-      if($cookie1 && $cookie2)
+      $cookie3=setcookie('userid',$extracted_user_id,$SET_COOKIEEXPIRY+$thecurrenttimestamp);
+      if($cookie1 && ($cookie2 && $cookie3))
 	{
 	  return true;
 	}
