@@ -87,6 +87,10 @@ function functionpage($ifexception=0)
 	  echo "\ttable name resolved\n";
 	}
     }
+  echo "\n ENTER THE COOKIE EXPIRY TIME";
+  $cookieexpirytime=trim(fgets($handle));
+  echo "\n";
+
 
   echo "\nWRITING THE CONFIGURATION TO THE LOGIN CONFIGURATION FILE";
   sleep(1);
@@ -109,7 +113,7 @@ function functionpage($ifexception=0)
     {
       echo "\n\n\n\n\n\n\n----ERROR ENCOUNTERED ==----------\n\n\n";
     }
-  $thestringtowrite="<?php\n".'$SET_THEMYSLHOSTNAME'."=\"$entered_host_name\";".'$SET_THEMYSQLUSERNAME'."=\"$entered_mysql_username\";".'$SET_THEMYSQLPASSWORD'."=\"$entered_mysql_password\";".'$SET_THEMYSQLDBNAME'."=\"$entered_db_name\";".'$SET_THEMYSQLTABLENAME'."=\"$entered_table_name\";\n?>";
+  $thestringtowrite="<?php\n".'$SET_THEMYSLHOSTNAME'."=\"$entered_host_name\";".'$SET_THEMYSQLUSERNAME'."=\"$entered_mysql_username\";".'$SET_THEMYSQLPASSWORD'."=\"$entered_mysql_password\";".'$SET_THEMYSQLDBNAME'."=\"$entered_db_name\";".'$SET_THEMYSQLTABLENAME'."=\"$entered_table_name\;\n".'$SET_COOKIEEXPIRY'."=\"$cookieexpirytime\";?>";
   $writtenstring=fwrite($filehandle,$thestringtowrite);
   $fileclosed=fclose($filehandle);;
   echo "FILE SUCCESSFULLY WROTE!!...NOW EXITING\n\n";

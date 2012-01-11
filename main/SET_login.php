@@ -9,6 +9,7 @@ this function does the following
    */
 function SET_login($NAME,$PASS,$CHECKED)
 {
+  require_once("SET_mysqlconnection.php");
   if(!$CHECKED)
     {
       return false;

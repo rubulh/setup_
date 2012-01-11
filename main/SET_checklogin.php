@@ -10,6 +10,7 @@ escaping and all other stuff is done in here
 
 function SET_checklogin($USERNAME,$PASS)
 {
+  require_once("SET_mysqlconnection.php");
   $USERNAME=mysql_real_escape_string($USERNAME);
   $HASHEDPASS=mysql_real_escape_string(md5(mysql_real_escape_string($PASS)));
   $query_checklogin=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLE WHERE NAME='$USERNAME' AND PASSWORD='$HASHEDPASS'");

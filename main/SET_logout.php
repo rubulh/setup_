@@ -7,6 +7,7 @@ SET_logout function does the following
 
 function SET_logout($USERID)
 {
+  require_once("SET_mysqlconnection.php");
   $thecurrenttimestamp=time();
   $ifsession_set=false;
   if(session_id())
