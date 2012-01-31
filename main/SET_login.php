@@ -19,6 +19,7 @@ function SET_login($NAME,$PASS,$CHECKED)
     {
       session_start();
       {
+	//this is redundant yet necessary as i need two functions
 	$query_all_details=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLENAME WHERE 'NAME'='$NAME' AND 'PASSWORD'='$PASS'");
 	$answer_all_details=mysql_fetch_array($query_all_details);
 	if(!$answer_all_details)
