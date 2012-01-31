@@ -9,8 +9,8 @@ function register($regusername,$regpass)
 	require_once("SET_mysqlconnection.php");
 	
 	$theregusername=mysql_real_escape_string($regusername);
-	$theregpass=mysql_real_escape_string($regpass);
-	$querytoregister="INSERT INTO $SET_THEMYSQLLOGINTABLENAME (NAME,PASSWORD,LOGGED,LOGINTIMESTAMP,LASTTIMESTAMPAUTHKEY,AUTHKEY,BASE,SALT,COOKIEEXPIRY,SESSIONID,USERID,LOGOUTTIMESTAMP,TOTALLOGGEDTIME) VALUES('$theregusername','$theregpass','7','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx')";
+	$md5theregpass=md5(mysql_real_escape_string($regpass));
+	$querytoregister="INSERT INTO $SET_THEMYSQLLOGINTABLENAME (NAME,PASSWORD,LOGGED,LOGINTIMESTAMP,LASTTIMESTAMPAUTHKEY,AUTHKEY,BASE,SALT,COOKIEEXPIRY,SESSIONID,LOGOUTTIMESTAMP,TOTALLOGGEDTIME) VALUES('$theregusername','$md5theregpass','7','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx')";
 	$ansregwuer=mysql_query($querytoregister);
 	$affred=mysql_affected_rows();
 	if($affre==(-1))
