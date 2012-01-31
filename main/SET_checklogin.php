@@ -13,7 +13,7 @@ function SET_checklogin($USERNAME,$PASS)
   require_once("SET_mysqlconnection.php");
   $USERNAME=mysql_real_escape_string($USERNAME);
   $HASHEDPASS=mysql_real_escape_string(md5(mysql_real_escape_string($PASS)));
-  $query_checklogin=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLE WHERE NAME='$USERNAME' AND PASSWORD='$HASHEDPASS'");
+  $query_checklogin=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLE WHERE NAME='$USERNAME' and PASSWORD='$HASHEDPASS'")
   $answer_checklogin=mysql_fetch_array($query_checklogin);
   $ansagain_checklogin=mysql_fetch_array($query_checklogin);
   if(($ansagain_checklogin))
@@ -27,6 +27,12 @@ function SET_checklogin($USERNAME,$PASS)
     }
   else if($answer_checklogin)
     {
+      $theloggedin=$answer_checklogin['LOGGED'];
+      if((!$SET_THEMULTIPLELOGIN) && ($theloggedin))
+	{
+		return "ALREADYLOGGED";
+		exit(1)
+	}
       return true;
       exit(1);
     }
