@@ -10,6 +10,14 @@ function register($regusername,$regpass)
 	
 	$theregusername=mysql_real_escape_string($regusername);
 	$md5theregpass=md5(mysql_real_escape_string($regpass));
+	$querytoevaluate=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLENAME WHERE NAME='$theregusername'");
+	$ansevaluate=mysql_fetch_array($ansevaluate);
+	if($ansevaluate)
+		{
+		return "ALREADYEXISTS";
+		exit(1);
+		}
+	
 	$querytoregister="INSERT INTO $SET_THEMYSQLLOGINTABLENAME (NAME,PASSWORD,LOGGED,LOGINTIMESTAMP,LASTTIMESTAMPAUTHKEY,AUTHKEY,BASE,SALT,COOKIEEXPIRY,SESSIONID,LOGOUTTIMESTAMP,TOTALLOGGEDTIME) VALUES('$theregusername','$md5theregpass','7','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx')";
 	$ansregwuer=mysql_query($querytoregister);
 	$affred=mysql_affected_rows();
