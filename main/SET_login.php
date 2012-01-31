@@ -10,7 +10,8 @@ this function does the following
 function SET_login($NAME,$PASS,$CHECKED)
 {
   require_once("SET_mysqlconnection.php");
-  if(!$CHECKED)
+
+  if((!$CHECKED) || ($CHECKED=="ALREADYLOGGED"))
     {
       return false;
       exit(1);
@@ -30,6 +31,13 @@ function SET_login($NAME,$PASS,$CHECKED)
 	    exit(1);
 	  }
 	$extracted_user_id=$answer_all_details['USERID'];
+	$extracted_logged=$answer_all_details['LOGGED'];
+	//check may be redundant
+	 if((!$SET_THEMULTIPLELOGIN) && ($extracted_logged))
+	{
+		return false;;
+		exit(1)
+	}
 	$thecurrenttimestamp=time();
 	$extracted_authkey=SET_randomstring();
 	$salt=SET_salt();
