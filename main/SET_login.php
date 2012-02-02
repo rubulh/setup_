@@ -42,10 +42,10 @@ function SET_login($NAME,$PASS,$CHECKED)
 	     exit(1)
 	}
 	$thecurrenttimestamp=time();
-	$extracted_authkey=SET_randomstring();
-	$salt=SET_salt();
+	$extracted_authkey=mysql_real_escape_string(SET_randomstring());
+	$salt=mysql_real_escape_string(SET_salt());
 	$hashedextracted_authkey=md5($extracted_authkey);
-	$base_main=SET_baserandomstring();
+	$base_main=mysql_real_escape_string(SET_baserandomstring());
 	$base=md5($thecurrenttimestamp.$salt.$thecurrenttimestamp.$extracted_user_id.$base_main.$USER);
 	$cookie_expiry_timestamp=$SET_COOKIEEXPIRY+$thexurrenttimestamp;
 	$THESESSIONID=session_id();
