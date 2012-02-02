@@ -5,7 +5,7 @@ SET_logout function does the following
 2.and then updates the database
    */
 
-function SET_logout($USERID)
+function SET_logout($_COOKIE['userid'])
 {
   require_once("SET_mysqlconnection.php");
   $thecurrenttimestamp=time();
