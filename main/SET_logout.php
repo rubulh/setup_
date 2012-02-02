@@ -4,7 +4,6 @@ SET_logout function does the following
 1.removes all the session and cookie variables
 2.and then updates the database
    */
-
 function SET_logout($_COOKIE['userid'])
 {
   require_once("SET_mysqlconnection.php");
