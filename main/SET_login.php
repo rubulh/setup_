@@ -35,8 +35,9 @@ function SET_login($NAME,$PASS,$CHECKED)
 	//check may be redundant
 	 if((!$SET_THEMULTIPLELOGIN) && ($extracted_logged))
 	{
-		return false;;
-		exit(1)
+	    error_log("[[[[[[[SET]>>>the SET_checklogin script allowed the user access to the SET_login and but multiple login incurred and multiple login disabled");
+	     return false;;
+	     exit(1)
 	}
 	$thecurrenttimestamp=time();
 	$extracted_authkey=SET_randomstring();
