@@ -20,6 +20,8 @@ function SET_login($NAME,$PASS,$CHECKED)
     {
       session_start();
       {
+	$NAME=mysql_real_escape_string($NAME);
+	$PASS=md5(mysql_real_escape_string($PASS));
 	//this is redundant yet necessary as i need two functions
 	$query_all_details=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLENAME WHERE 'NAME'='$NAME' AND 'PASSWORD'='$PASS'");
 	$answer_all_details=mysql_fetch_array($query_all_details);
@@ -35,7 +37,7 @@ function SET_login($NAME,$PASS,$CHECKED)
 	//check may be redundant
 	 if((!$SET_THEMULTIPLELOGIN) && ($extracted_logged))
 	{
-	    error_log("[[[[[[[SET]>>>the SET_checklogin script allowed the user access to the SET_login and but multiple login incurred and multiple login disabled");
+	    error_log("[[[[[[[SET]>>>the SET_checklogin script allowed the user access to the SET_login and but multiple login incurred and multiple login disabled for (NAME,PASS)($NAME)");
 	     return false;;
 	     exit(1)
 	}
