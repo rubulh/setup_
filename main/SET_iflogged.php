@@ -18,6 +18,7 @@ function SET_iflogged()
   $thecurrentuserid=$_COOKIE['userid'];
   $ifsession_set=false;
   $thecurrenttimestamp=time();
+  $thereneratedthing=false;
   if(($currentauthkeycookie)&&($currentbasecookie)&&($thecurrentuserid))
     {
       if($currentsessionid)
@@ -66,6 +67,29 @@ function SET_iflogged()
 	    $cookie3=setcookie("userid","",$thecurrenttimestamp-60*60);
 	    $cookie4=setcookie("PHPSESSID","",$thecurrenttimestamp-60*60);
 	    }
+	  else if(($loggedindb)&&(md5($baseindb)==$currentbasecookie)&&(md5($logintimeindb.$saltindb.$lasttimedb.$thecurrentuserid.$baseindb.$usernameindb)==$currentbaseincookie)&&())
+		{
+		if(!($currentsessionid && $thecurrentsessionauthkey))
+			{
+			$thereneratedthing=SET_regenerate($thecurrentuserid);
+			if(!$thereneratedthing)
+				{
+					if($currentsessionid)
+	        			{
+					$_SESSION=array();
+	         			$_SESSION['authkey']="";
+	         			session_destroy();
+	        			}
+	    			$cookie1=setcookie("authkey","",$thecurrenttimestamp-60*60);
+	    			$cookie2=setcookie("base","",$thecurrenttimestamp-60*60);
+	    			$cookie3=setcookie("userid","",$thecurrenttimestamp-60*60);
+	    			$cookie4=setcookie("PHPSESSID","",$thecurrenttimestamp-60*60);
+				}
+				return false;
+				exit(1);
+			}
+		}
+	//i might need another condition inside the if condition in here 
 	}
       }
     }
@@ -77,7 +101,7 @@ function SET_iflogged()
   else if(!$finallysessionid)
     {
       return false;
-    }t
+    }
 }
 
 /*
