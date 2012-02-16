@@ -5,6 +5,7 @@ this function does the following
 1.sets the session authkey and the same authkey encrypted in the cookie next line
 2.sets the cookie authkey and userid in the session 
 3.sets the another-authkey in the cookie called base after hashed with proper salt and all other things forms the entry in the database
+
 4.
    */
 function SET_login($NAME,$PASS,$CHECKED)
