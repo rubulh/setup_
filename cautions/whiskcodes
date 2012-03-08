@@ -3,3 +3,6 @@
 3.seems like most of it went well on the login function but the setcookie variables either or both of them is giving false;
 4.the logout function could not update the database and set all the parameters back
 5.the logout function could not extract the details of the user from the database
+29. the update function could not update the cookies properly
+
+28.the affected rows for the update query at the update function retuns zero
