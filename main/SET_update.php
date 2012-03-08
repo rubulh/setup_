@@ -9,6 +9,7 @@ files needed randomstring salt base
 
 function SET_update($USERID)
 {
+require_once("SET_mysqlconnection.php");
 $_SESSION=array();
 $regenerate=session_regenerate_id(true);
 $dnewsessionid=session_id();
