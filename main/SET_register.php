@@ -13,7 +13,7 @@ function SET_register($regusername,$regpass)
 	$ansevaluate=mysql_fetch_array($querytoevaluate);
 	if($ansevaluate)
 		{
-		return "ALREADYEXISTS";
+		return 7;
 		exit(1);
 		}
 	
@@ -21,19 +21,19 @@ function SET_register($regusername,$regpass)
 	$ansregwuer=mysql_query($querytoregister);
 	if(mysql_error())
 		{
-error_log("[[[[[[[SET]>>>".mysql_error());
+      error_log("[[[[[[[SET]>>>".mysql_error());
 		}
 	$affred=mysql_affected_rows();
 	if($affred==(-1))
 		{
 		error_log("[[[[[[[SET]>>>the SET_register function could not update the database for the user registration for USER ($theregusername)");
 	      	SET_whisk(2);
-	      	return false;
+	      	return 0;
 	      	exit(1);
 		}
 	else if($affred==1)
 		{
-		return true;	
+		return 1;	
 		}
 
 }
