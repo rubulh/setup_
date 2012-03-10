@@ -17,7 +17,7 @@ function SET_register($regusername,$regpass)
 		exit(1);
 		}
 	
-	$querytoregister="INSERT INTO $SET_THEMYSQLLOGINTABLE (NAME,PASSWORD,LOGGED,LOGINTIMESTAMP,LASTTIMESTAMPAUTHKEY,AUTHKEY,BASE,SALT,COOKIEEXPIRY,SESSIONID,LOGOUTTIMESTAMP,TOTALLOGGEDTIME) VALUES('$theregusername','$md5theregpass','7','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx')";
+	$querytoregister="INSERT INTO $SET_THEMYSQLLOGINTABLE (NAME,PASSWORD,LOGGED,LOGINTIMESTAMP,LASTTIMESTAMPAUTHKEY,AUTHKEY,BASE,SALT,COOKIEEXPIRY,SESSIONID,LOGOUTTIMESTAMP,TOTALLOGGEDTIME) VALUES('$theregusername','$md5theregpass','x','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx')";
 	$ansregwuer=mysql_query($querytoregister);
 	if(mysql_error())
 		{
