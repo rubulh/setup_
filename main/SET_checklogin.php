@@ -13,27 +13,38 @@ function SET_checklogin($USERNAME,$PASS)
   require_once("SET_mysqlconnection.php");
   $USERNAME=mysql_real_escape_string($USERNAME);
   $HASHEDPASS=mysql_real_escape_string(md5(mysql_real_escape_string($PASS)));
-  $query_checklogin=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLE WHERE NAME='$USERNAME' and PASSWORD='$HASHEDPASS'")
+  $query_checklogin=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLE WHERE NAME='$USERNAME'");
+  if(mysql_error())
+		{
+      error_log("[[[[[[[SET]>>>".mysql_error());
+		}
   $answer_checklogin=mysql_fetch_array($query_checklogin);
   $ansagain_checklogin=mysql_fetch_array($query_checklogin);
   if(($ansagain_checklogin))
     {
-      error_log("[[[[[[SET]>>>MULTIPLE ENTRIES FOUND FOR SAME USERNAME AND PASSWORD ($USERNAME,$HASHEDPASS)");
+	$useridfirst=$answer_checklogin['USERID'];
+	$useridsecond=$ansagain_checklogin['USERID'];
+      error_log("[[[[[[SET]>>>MULTIPLE ENTRIES FOUND FOR SAME USERNAME AND USERID ($USERNAME,$useridfirst,$useridsecond)");
+      SET_whisk(73);
+      return 0;
     }
-  if(!$answer_checklogin)
+$answer_checklogin_AFTER=false;
+$thereturnedpass=$answer_checklogin['PASSWORD'];
+if($thereturnedpass==$HASHEDPASS)$answer_checklogin_AFTER=true;
+  if(!$answer_checklogin_AFTER)
     {
-      return false;
+      return 0;
       exit(1);
     }
-  else if($answer_checklogin)
+  else if($answer_checklogin_AFTER)
     {
       $theloggedin=$answer_checklogin['LOGGED'];
-      if((!$SET_THEMULTIPLELOGIN) && ($theloggedin))
+      if((!$SET_THEMULTIPLELOGIN) && (is_numeric($theloggedin) && (!$theloggedin)))
 	{
-		return "ALREADYLOGGED";
-		exit(1)
+		return 1;
+		exit(1);
 	}
-      return true;
+      return 7;
       exit(1);
     }
 }
