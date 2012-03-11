@@ -6,7 +6,17 @@
 
 function SET_register($regusername,$regpass)
 {
-	require_once("SET_mysqlconnection.php");
+global $SET_THEMYSQLHOSTNAME;
+global $SET_THEMYSQLUSERNAME;
+global $SET_THEMYSQLPASSWORD;
+global $SET_THEMYSQLDBNAME;
+global $SET_THEMYSQLLOGINTABLE;
+global $SET_COOKIEEXPIRY;
+global $SET_THEMULTIPLELOGIN;
+global $SET_BASIC_MYSQL_CONNECT;
+global $SET_BASIC_SELECT_DATABASE;
+
+var_dump("$SET_THEMYSQLHOSTNAME","$SET_THEMYSQLUSERNAME","$SET_THEMYSQLPASSWORD","$SET_THEMYSQLLOGINTABLE");
 	$theregusername=mysql_real_escape_string($regusername);
 	$md5theregpass=md5(mysql_real_escape_string($regpass));
 	$querytoevaluate=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLE WHERE NAME='$theregusername'");
@@ -17,7 +27,7 @@ function SET_register($regusername,$regpass)
 		exit(1);
 		}
 	
-	$querytoregister="INSERT INTO $SET_THEMYSQLLOGINTABLE (NAME,PASSWORD,LOGGED,LOGINTIMESTAMP,LASTTIMESTAMPAUTHKEY,AUTHKEY,BASE,SALT,COOKIEEXPIRY,SESSIONID,LOGOUTTIMESTAMP,TOTALLOGGEDTIME) VALUES('$theregusername','$md5theregpass','x','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx')";
+	$querytoregister="INSERT INTO $SET_THEMYSQLLOGINTABLE (NAME,PASSWORD,LOGGED,LOGINTIMESTAMP,LASTTIMESTAMP,LASTTIMESTAMPAUTHKEY,AUTHKEY,BASE,SALT,COOKIEEXPIRY,SESSIONID,LOGOUTTIMESTAMP,TOTALLOGGEDTIME) VALUES('$theregusername','$md5theregpass','x','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx','xxxxxxx')";
 	$ansregwuer=mysql_query($querytoregister);
 	if(mysql_error())
 		{

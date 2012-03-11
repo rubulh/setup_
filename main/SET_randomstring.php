@@ -12,6 +12,6 @@ for($i=0;$i<$length;$i++)
   {
     $thereturnstring=$thereturnstring.$therootstring[rand(0,(strlen($therootstring)-1))];
   }
-return $threturnstring;
+return $thereturnstring;
 }
 ?>

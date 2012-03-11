@@ -5,14 +5,19 @@ this function does the following
 1.sets the session authkey and the same authkey encrypted in the cookie next line
 2.sets the cookie authkey and userid in the session 
 3.sets the another-authkey in the cookie called base after hashed with proper salt and all other things forms the entry in the database
-
-4.
    */
 function SET_login($NAME,$PASS,$CHECKED)
 {
-  require_once("SET_mysqlconnection.php");
-
-  if((!$CHECKED) || ($CHECKED=="ALREADYLOGGED"))
+global $SET_THEMYSQLHOSTNAME;
+global $SET_THEMYSQLUSERNAME;
+global $SET_THEMYSQLPASSWORD;
+global $SET_THEMYSQLDBNAME;
+global $SET_THEMYSQLLOGINTABLE;
+global $SET_COOKIEEXPIRY;
+global $SET_THEMULTIPLELOGIN;
+global $SET_BASIC_MYSQL_CONNECT;
+global $SET_BASIC_SELECT_DATABASE;
+  if((!$CHECKED) || ($CHECKED==7))
     {
       return false;
       exit(1);
@@ -24,7 +29,9 @@ function SET_login($NAME,$PASS,$CHECKED)
 	$NAME=mysql_real_escape_string($NAME);
 	$PASS=md5(mysql_real_escape_string($PASS));
 	//this is redundant yet necessary as i need two functions
-	$query_all_details=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLENAME WHERE 'NAME'='$NAME' AND 'PASSWORD'='$PASS'");
+	$query_all_details=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLE WHERE NAME='$NAME' AND PASSWORD='$PASS'");
+
+var_dump(mysql_error());
 	$answer_all_details=mysql_fetch_array($query_all_details);
 	if(!$answer_all_details)
 	  {
@@ -40,22 +47,21 @@ function SET_login($NAME,$PASS,$CHECKED)
 	{
 	    error_log("[[[[[[[SET]>>>the SET_checklogin script allowed the user access to the SET_login and but multiple login incurred and multiple login disabled for (NAME,PASS)($NAME)");
 	     return false;;
-	     exit(1)
 	}
 	$thecurrenttimestamp=time();
 	$extracted_authkey=mysql_real_escape_string(SET_randomstring());
 	$salt=mysql_real_escape_string(SET_salt());
 	$hashedextracted_authkey=md5($extracted_authkey);
 	$base_main=mysql_real_escape_string(SET_baserandomstring());
-	$base=md5($thecurrenttimestamp.$salt.$thecurrenttimestamp.$extracted_user_id.$base_main.$USER);
-	$cookie_expiry_timestamp=$SET_COOKIEEXPIRY+$thexurrenttimestamp;
+	$base=md5($thecurrenttimestamp.$salt.$thecurrenttimestamp.$extracted_user_id.$base_main.$NAME);
+	$cookie_expiry_timestamp=$SET_COOKIEEXPIRY+$thecurrenttimestamp;
 	$THESESSIONID=session_id();
 	{
-	  $query_update_database=mysql_query("UPDATE $SET_THEMYSQLLOGINTABLE SET 'LOGINTIMESTAMP'='$thecurrenttimestamp','LASTTIMESTAMP'='$thecurrenttimestamp','AUTHKEY'='$extracted_authkey','BASE'='$base_main','SALT'='$salt','COOKIEEXPIRY'='$cookie_expiry_timestamp','LOGGED'='1','SESSIONID'='$THESESSIONID' WHERE USERID='$extracted_user_id'");
+	  $query_update_database=mysql_query("UPDATE $SET_THEMYSQLLOGINTABLE SET LOGINTIMESTAMP='$thecurrenttimestamp',LASTTIMESTAMP='$thecurrenttimestamp',AUTHKEY='$extracted_authkey',BASE='$base_main',SALT='$salt',COOKIEEXPIRY='$cookie_expiry_timestamp',LOGGED='1',SESSIONID='$THESESSIONID' WHERE USERID='$extracted_user_id'");
 	  $answer_update_database=mysql_affected_rows();
 	  if(!$answer_update_database)
 	    {
-	      error_log("[[[[[[[SET]>>>the SET_login function could not update the database for the user login for USER,USERID ($USER,$extracted_user_id)");
+	      error_log("[[[[[[[SET]>>>the SET_login function could not update the database for the user login for USER,USERID ($NAME,$extracted_user_id)");
 	      whisk(2);
 	      return false;
 	      exit(1);

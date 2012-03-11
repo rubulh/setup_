@@ -4,9 +4,19 @@ SET_logout function does the following
 1.removes all the session and cookie variables
 2.and then updates the database
    */
-function SET_logout($_COOKIE['userid'])
+function SET_logout()
 {
-  require_once("SET_mysqlconnection.php");
+session_start();
+global $SET_THEMYSQLHOSTNAME;
+global $SET_THEMYSQLUSERNAME;
+global $SET_THEMYSQLPASSWORD;
+global $SET_THEMYSQLDBNAME;
+global $SET_THEMYSQLLOGINTABLE;
+global $SET_COOKIEEXPIRY;
+global $SET_THEMULTIPLELOGIN;
+global $SET_BASIC_MYSQL_CONNECT;
+global $SET_BASIC_SELECT_DATABASE;
+$USERID=$_COOKIE['userid'];
   $thecurrenttimestamp=time();
   $ifsession_set=false;
   if(session_id())
@@ -26,18 +36,16 @@ function SET_logout($_COOKIE['userid'])
   }
   {
     //extract details from the database
-    $query_extr_all_details=mysql_query("SELECT * FROM $SETTHEMYSQLLOGINTABLE WHERE 'USERID'='$USERID'");
-    $answer_extr_all_details=mysql_fetch_array();
-    $againanswer_extr_all_details=mysql_fetch_array();
-    if($againanswer_extr_all_details)
+    $query_extr_all_details=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLE WHERE USERID='$USERID'");
+    $answer_extr_all_details=mysql_fetch_array($query_extr_all_details);
+    $againanswer_extr_all_details=mysql_fetch_array($query_extr_all_details);
+    if(!$answer_extr_all_details)
       {
 	 error_log("[[[[[[[SET]>>>the logout function could not extract the details of the USERID ($USERID)");
+	 SET_whisk(5);
 	 return false;
-	 whisk(5);
-	 exit(1);
-
       }
-    $USER=$answer_extr_all_details['USER'];
+    $USER=$answer_extr_all_details['NAME'];
     $logged_till_now=$answer_extr_all_details['TOTALLOGGEDTIME'];
     $logintimestamp=$answer_extr_all_details['LOGINTIMESTAMP'];
     $loggedtotal=$logged_till_now+($thecurrenttimestamp-$logintimestamp);
@@ -47,10 +55,8 @@ function SET_logout($_COOKIE['userid'])
     if(!$answer_update)
       {
 	 error_log("[[[[[[[SET]>>>the logout function could not update the database for the USER,USERID ($USER,$USERID) the query failed");
+	 whisk(5);
 	 return false;
-	 whisk(4);
-	 exit(1);
-
       }
   }
   return true;
