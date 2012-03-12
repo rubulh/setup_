@@ -17,6 +17,7 @@ global $SET_THEMULTIPLELOGIN;
 global $SET_BASIC_MYSQL_CONNECT;
 global $SET_BASIC_SELECT_DATABASE;
 $USERID=$_COOKIE['userid'];
+$LASTTIMESTAMPAUTHKEY=$_SESSION['authkey'];
   $thecurrenttimestamp=time();
   $ifsession_set=false;
   if(session_id())
@@ -50,7 +51,11 @@ $USERID=$_COOKIE['userid'];
     $logintimestamp=$answer_extr_all_details['LOGINTIMESTAMP'];
     $loggedtotal=$logged_till_now+($thecurrenttimestamp-$logintimestamp);
     //update the database
-    $query_update=mysql_query("UPDATE $SET_THEMYSQLLOGINTABLE SET 'LOGGED'='0','LOGOUTSTAMP'='$thecurrenttimestamp','TOTALLOGGEDTIME'='$loggedtotal','LASTIMESTAMP'='0','SESSIONID'='','BASE'='',SALT='','AUTHKEY'='','COOKIEEXPIRY='$thecurrenttimestamp'");
+    $query_update=mysql_query("UPDATE $SET_THEMYSQLLOGINTABLE SET LOGGED='0',LASTTIMESTAMP='$thecurrenttimestamp',LASTTIMESTAMPAUTHKEY='$LASTTIMESTAMPAUTHKEY',LOGOUTTIMESTAMP='$thecurrenttimestamp',TOTALLOGGEDTIME='$loggedtotal',SESSIONID='',BASE='',SALT='',AUTHKEY='',COOKIEEXPIRY='$thecurrenttimestamp' WHERE USERID='$USERID'");
+	if(mysql_error())
+		{
+      		error_log("[[[[[[[SET]>>>".mysql_error());
+		}
     $answer_update=mysql_affected_rows();
     if(!$answer_update)
       {
