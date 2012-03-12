@@ -10,7 +10,15 @@ escaping and all other stuff is done in here
 
 function SET_checklogin($USERNAME,$PASS)
 {
-  require_once("SET_mysqlconnection.php");
+global $SET_THEMYSQLHOSTNAME;
+global $SET_THEMYSQLUSERNAME;
+global $SET_THEMYSQLPASSWORD;
+global $SET_THEMYSQLDBNAME;
+global $SET_THEMYSQLLOGINTABLE;
+global $SET_COOKIEEXPIRY;
+global $SET_THEMULTIPLELOGIN;
+global $SET_BASIC_MYSQL_CONNECT;
+global $SET_BASIC_SELECT_DATABASE;
   $USERNAME=mysql_real_escape_string($USERNAME);
   $HASHEDPASS=mysql_real_escape_string(md5(mysql_real_escape_string($PASS)));
   $query_checklogin=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLE WHERE NAME='$USERNAME'");
@@ -31,6 +39,7 @@ function SET_checklogin($USERNAME,$PASS)
 $answer_checklogin_AFTER=false;
 $thereturnedpass=$answer_checklogin['PASSWORD'];
 if($thereturnedpass==$HASHEDPASS)$answer_checklogin_AFTER=true;
+var_dump($thereturnedpass,$HASHEDPASS);
   if(!$answer_checklogin_AFTER)
     {
       return 0;
@@ -38,14 +47,13 @@ if($thereturnedpass==$HASHEDPASS)$answer_checklogin_AFTER=true;
     }
   else if($answer_checklogin_AFTER)
     {
-      $theloggedin=$answer_checklogin['LOGGED'];
-      if((!$SET_THEMULTIPLELOGIN) && (is_numeric($theloggedin) && (!$theloggedin)))
-	{
-		return 1;
-		exit(1);
-	}
-      return 7;
-      exit(1);
+	$theloggedin=$answer_checklogin['LOGGED'];
+	if($SET_THEMULTIPLELOGIN)return 1;
+	else if(!$SET_THEMULTIPLELOGIN)
+		{
+			if((!$theloggedin))return 1;
+			else return 7;
+		}
     }
 }
 

@@ -16,7 +16,6 @@ global $SET_THEMULTIPLELOGIN;
 global $SET_BASIC_MYSQL_CONNECT;
 global $SET_BASIC_SELECT_DATABASE;
 
-var_dump("$SET_THEMYSQLHOSTNAME","$SET_THEMYSQLUSERNAME","$SET_THEMYSQLPASSWORD","$SET_THEMYSQLLOGINTABLE");
 	$theregusername=mysql_real_escape_string($regusername);
 	$md5theregpass=md5(mysql_real_escape_string($regpass));
 	$querytoevaluate=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLE WHERE NAME='$theregusername'");

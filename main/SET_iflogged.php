@@ -10,7 +10,17 @@ the flow is
    */
 function SET_iflogged()
 {
-  require_once("SET_mysqlconnection.php");
+var_dump($_COOKIE);
+global $SET_THEMYSQLHOSTNAME;
+global $SET_THEMYSQLUSERNAME;
+global $SET_THEMYSQLPASSWORD;
+global $SET_THEMYSQLDBNAME;
+global $SET_THEMYSQLLOGINTABLE;
+global $SET_COOKIEEXPIRY;
+global $SET_THEMULTIPLELOGIN;
+global $SET_BASIC_MYSQL_CONNECT;
+global $SET_BASIC_SELECT_DATABASE;
+
   $thecurrentsessionid=session_id();
   $currentauthkeycookie=$_COOKIE['authkey'];
   $currentbasecookie=$_COOKIE['base'];
@@ -21,14 +31,14 @@ function SET_iflogged()
   $thereneratedthing=false;
   if(($currentauthkeycookie)&&($currentbasecookie)&&($thecurrentuserid))
     {
-      if($currentsessionid)
+      if($thecurrentsessionid)
        {
       $ifsession_set=true;
        }
      {
       //extract all details from the table
-      $query_ex_details=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLENAME WHERE 'USERID'='$thecurrentuserid'");
-      $answer_ex_details=mysql_fetch_array();
+      $query_ex_details=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLE WHERE USERID='$thecurrentuserid'");
+      $answer_ex_details=mysql_fetch_array($query_ex_details);
       if(!$answer_ex_details)
 	{
 	  if($ifsession_set)
@@ -52,12 +62,18 @@ function SET_iflogged()
 	  $authkeyindb=$answer_ex_details['AUTHKEY'];
 	  $baseindb=$answer_ex_details['BASE'];
 	  $saltindb=$answer_ex_details['SALT'];
-	  $usernameindb=$answer_ex_details['USER'];
+	  $usernameindb=$answer_ex_details['NAME'];
 	  $cookieexpiryindb=$answer_ex_details['COOKIEEXPIRY'];
-	  if((!$loggedindb)&&((!(md5($baseindb)==$currentbasecookie))&&(!(md5($logintimeindb.$saltindb.$lasttimedb.$thecurrentuserid.$baseindb.$usernameindb)==$currentbaseincookie))))
+error_log($loggedindb);
+error_log(md5($authkeyindb));
+error_log($thecurrentsessionauthkey);
+error_log(md5($logintimeindb.$saltindb.$lasttimedb.$thecurrentuserid.$baseindb.$usernameindb));
+error_log($currentbasecookie);
+	  if(!(($loggedindb)&&(md5($authkeyindb)==$currentauthkeycookie)&&(md5($logintimeindb.$saltindb.$lasttimedb.$thecurrentuserid.$baseindb.$usernameindb)==$currentbasecookie)))
 	    {
 	     if($ifsession_set)
 	        {
+error_log("line 76''");
 		$_SESSION=array();
 	         $_SESSION['authkey']="";
 	         session_destroy();
@@ -66,27 +82,27 @@ function SET_iflogged()
 	    $cookie2=setcookie("base","",$thecurrenttimestamp-60*60);
 	    $cookie3=setcookie("userid","",$thecurrenttimestamp-60*60);
 	    $cookie4=setcookie("PHPSESSID","",$thecurrenttimestamp-60*60);
+	    return false;
 	    }
-	  else if(($loggedindb)&&(md5($baseindb)==$currentbasecookie)&&(md5($logintimeindb.$saltindb.$lasttimedb.$thecurrentuserid.$baseindb.$usernameindb)==$currentbaseincookie)&&())
+	  else if(($loggedindb)&&(md5($authkeyindb)==$currentauthkeycookie)&&(md5($logintimeindb.$saltindb.$lasttimedb.$thecurrentuserid.$baseindb.$usernameindb)==$currentbasecookie))
 		{
-		if(!($currentsessionid && $thecurrentsessionauthkey))
+		if(!($thecurrentsessionid && $thecurrentsessionauthkey))
 			{
 			$thereneratedthing=SET_regenerate($thecurrentuserid);
 			if(!$thereneratedthing)
 				{
-					if($currentsessionid)
+					if($thecurrentsessionid)
 	        			{
+					$thecurrentsessionauthkey;
 					$_SESSION=array();
-	         			$_SESSION['authkey']="";
 	         			session_destroy();
 	        			}
 	    			$cookie1=setcookie("authkey","",$thecurrenttimestamp-60*60);
 	    			$cookie2=setcookie("base","",$thecurrenttimestamp-60*60);
 	    			$cookie3=setcookie("userid","",$thecurrenttimestamp-60*60);
 	    			$cookie4=setcookie("PHPSESSID","",$thecurrenttimestamp-60*60);
-				}
 				return false;
-				exit(1);
+				}
 			}
 		}
 	//i might need another condition inside the if condition in here 
@@ -94,7 +110,7 @@ function SET_iflogged()
       }
     }
   $finallysessionid=session_id();
-  if($finallyseessionid)
+  if($finallysessionid)
     {
       return $finallysessionid;
     }
