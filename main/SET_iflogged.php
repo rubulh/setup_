@@ -10,7 +10,6 @@ the flow is
    */
 function SET_iflogged()
 {
-var_dump($_COOKIE);
 global $SET_THEMYSQLHOSTNAME;
 global $SET_THEMYSQLUSERNAME;
 global $SET_THEMYSQLPASSWORD;
@@ -59,9 +58,9 @@ global $SET_BASIC_SELECT_DATABASE;
 	  $loggedindb=$answer_ex_details['LOGGED'];
 	  $logintimeindb=$answer_ex_details['LOGINTIMESTAMP'];
 	  $lasttimedb=$answer_ex_details['LASTTIMESTAMP'];
-	  $authkeyindb=$answer_ex_details['AUTHKEY'];
-	  $baseindb=$answer_ex_details['BASE'];
-	  $saltindb=$answer_ex_details['SALT'];
+	  $authkeyindb=mysql_real_escape_string($answer_ex_details['AUTHKEY']);
+	  $baseindb=mysql_real_escape_string($answer_ex_details['BASE']);
+	  $saltindb=mysql_real_escape_string($answer_ex_details['SALT']);
 	  $usernameindb=$answer_ex_details['NAME'];
 	  $cookieexpiryindb=$answer_ex_details['COOKIEEXPIRY'];
 error_log($loggedindb);
@@ -69,11 +68,11 @@ error_log(md5($authkeyindb));
 error_log($thecurrentsessionauthkey);
 error_log(md5($logintimeindb.$saltindb.$lasttimedb.$thecurrentuserid.$baseindb.$usernameindb));
 error_log($currentbasecookie);
+error_log("to verify i am using".$logintimeindb." ".$saltindb." ".$lasttimedb." ".$thecurrentuserid." ".$baseindb." ".$usernameindb);
 	  if(!(($loggedindb)&&(md5($authkeyindb)==$currentauthkeycookie)&&(md5($logintimeindb.$saltindb.$lasttimedb.$thecurrentuserid.$baseindb.$usernameindb)==$currentbasecookie)))
 	    {
 	     if($ifsession_set)
 	        {
-error_log("line 76''");
 		$_SESSION=array();
 	         $_SESSION['authkey']="";
 	         session_destroy();

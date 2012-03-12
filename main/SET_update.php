@@ -7,10 +7,28 @@ session start must be outside this function
 files needed randomstring salt base 
 */
 
-function SET_update($USERID)
+function SET_update()
 {
-require_once("SET_mysqlconnection.php");
+global $SET_THEMYSQLHOSTNAME;
+global $SET_THEMYSQLUSERNAME;
+global $SET_THEMYSQLPASSWORD;
+global $SET_THEMYSQLDBNAME;
+global $SET_THEMYSQLLOGINTABLE;
+global $SET_COOKIEEXPIRY;
+global $SET_THEMULTIPLELOGIN;
+global $SET_BASIC_MYSQL_CONNECT;
+global $SET_BASIC_SELECT_DATABASE;
+$USERID=$_COOKIE['userid'];
 $_SESSION=array();
+$getalldetails_query=mysql_query("SELECT * FROM $SET_THEMYSQLLOGINTABLE where USERID='$USERID'");
+if(mysql_error())
+		{
+      		error_log("[[[[[[[SET]>>>".mysql_error());
+		}
+$fetchalldetails=mysql_fetch_array($getalldetails_query);
+$thelogintimestamp=$fetchalldetails['LOGINTIMESTAMP'];
+$usernameindb=$fetchalldetails['NAME'];
+$thebeforeauthkey=$fetchalldetails['AUTHKEY'];
 $regenerate=session_regenerate_id(true);
 $dnewsessionid=session_id();
 $dthecurrenttimestamp=time();
@@ -18,13 +36,13 @@ $dextracted_authkey=mysql_real_escape_string(SET_randomstring());
 $dsalt=mysql_real_escape_string(SET_salt());
 $dhashedextracted_authkey=md5($dextracted_authkey);
 $dbase_main=mysql_real_escape_string(SET_baserandomstring());
-$dbase=md5($dthecurrenttimestamp.$dsalt.$dthecurrenttimestamp.$USERID.$dbase_main.$USERID);
-$dcookie_expiry_timestamp=$SET_COOKIEEXPIRY+$thecurrenttimestamp;
-
+error_log("to update i am using".$thelogintimestamp." ".$dsalt." ".$dthecurrenttimestamp." ".$USERID." ".$dbase_main." ".$usernameindb);
+$dbase=md5($thelogintimestamp.$dsalt.$dthecurrenttimestamp.$USERID.$dbase_main.$usernameindb);
+$dcookie_expiry_timestamp=$SET_COOKIEEXPIRY+$dthecurrenttimestamp;
 $_SESSION['authkey']=$dhashedextracted_authkey;
 $dcookie1=setcookie("authkey",$dhashedextracted_authkey,$dcookie_expiry_timestamp);
-$dcookie2=setcookie("base",$dbasd,$dcookie_expiry_timestamp);
-$dcookie3=setcookie('userid',$USERID,$dcookie_expiry_timestamp);
+$dcookie2=setcookie("base",$dbase,$dcookie_expiry_timestamp);
+$dcookie3=setcookie("userid",$USERID,$dcookie_expiry_timestamp);
 if(!($dcookie1 && $dcookie2 && $dcookie3))
 	{
 	
@@ -33,8 +51,12 @@ if(!($dcookie1 && $dcookie2 && $dcookie3))
 	 return false;
 	 exit(1);
 	}
-$dupdatequery="UPDATE $SET_THEMYSQLLOGINTABLENAME set AUTHKEY='$dextracted_authkey', BASE='$dbase',SALT='$dsalt',COOKIEEXPIRY='$dcookie_expiry_timestamp',LASTTIMESTAMP='$dthecurrenttimestamp',SESSIONID='$dnewsessionid' ";
+$dupdatequery="UPDATE $SET_THEMYSQLLOGINTABLE set AUTHKEY='$dextracted_authkey', BASE='$dbase_main',SALT='$dsalt',COOKIEEXPIRY='$dcookie_expiry_timestamp',LASTTIMESTAMP='$dthecurrenttimestamp',LASTTIMESTAMPAUTHKEY='$thebeforeauthkey',SESSIONID='$dnewsessionid' ";
 $dqueried=mysql_query("$dupdatequery");
+if(mysql_error())
+		{
+      		error_log("[[[[[[[SET]>>>".mysql_error());
+		}
 if(!mysql_affected_rows())
 	{
 	 error_log("[[[[[[[SET]>>>the SET_update function could not update the updated parameters for the USERID($USERID)");
