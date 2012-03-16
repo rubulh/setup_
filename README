@@ -1,0 +1,98 @@
+DEPENDENCIES
+apache2 with php and mysql support
+
+
+HOW TO INSTALL
+)copy the folder the root of the project
+)chmod the folder to 644
+
+# sudo chmod -R 644 setup_/
+
+)start httpd and mysqld daemon
+
+# service httpd start
+# service mysqld start
+
+)parse the file functionpage.php from the terminal
+
+# php -f functionpage.php
+
+)enter the configuration details correctly if any of the details are entered incorrectly then the file ll prompt again
+
+)once the file has parsed completely and all the configuration variables are in place the setup is ready to use
+
+
+
+HOW TO USE
+
+)note that session_start() has to be called in by the user wherever the session variables are in use none of the functions calls it.so it is the responsible of the programmer to call to it
+
+)note that the necessary includes must be done in form of require_once();
+
+)note the file SET_include.php has to be included in every file
+
+)and include the corressponding script in the corressponding file as mentioned under
+
+
+)note that the database fields are
+USERID-primary key
+LOGINTIMESTAMP-
+LASTTIMESTAMP-
+LASTTIMESTAMPAUTHKEY-
+AUTHKEY
+BASE
+SALT
+COOKIEEXPIRY
+LOGGED
+SESSIONID
+NAME
+PASSWORD-md5()
+LOGOUTTIMESTAMP
+TOTALLOGGDTIME
+
+
+
+FUNCTIONS
+
+SET_register(name,pass)
+returns 7 for already exists
+returns 1 for successful registration
+returns false for unsuccessful registration
+
+
+
+
+SET_checklogin(name,pass)
+returns 7 if the user has already logged in and multiple login is disabled
+returns 1 for correct login
+returns false for incorrect login
+
+
+
+SET_login(name,pass,returnfrom SET_checklogin)
+returns 1 for successful login 
+returns false for unsuccessful login
+
+this function sets  all the session and cookies and  the database is properly implemeted
+and the field LASTTIMESTAMP is available as 'xxxxxxx' for teh first login of user
+
+
+SET_iflogged()
+returns true for already logged in
+returns false for not logged in
+if in case the login cookies variables are fine but the session variables are removed this function ll call SET_regenerate and update them.so the file SET_regerate has to be included wherever the other file is included
+
+SET_update()
+returns true for successfull update
+returns false for unsuccessfull update
+
+
+SET_logout
+returns true for successfully logged out
+returns false for unsuccessfull attempt
+
+
+
+
+NOTE
+for any bugs and issues and any other problems rubulhaloi2007@gmail.com
