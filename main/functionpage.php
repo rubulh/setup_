@@ -12,6 +12,7 @@ function functionpage($ifexception=0)
 {
   if(!$ifexception)
     {
+    A:
       echo "\nENTER THE HOST NAME:";
       $handle=fopen("php://stdin","r");
       $entered_host_name=trim(fgets($handle));
@@ -27,22 +28,16 @@ function functionpage($ifexception=0)
       sleep(1);
       echo ".";
       sleep(1);
-      echo ".";;
-      sleep(1);
-      echo ".";
-      sleep(1);
-      echo ".";
-      sleep(1);
-      echo ".";
-      sleep(1);
-      echo ".";
-      sleep(2);
-
-      $mysql_connection_trial=@mysql_connect($entered_host_name,$entered_mysql_username,$entered_mysql_password);
-      
+      $mysql_connection_trial=mysql_connect($entered_host_name,$entered_mysql_username,$entered_mysql_password);
+      if(mysql_error())
+	{
+	  echo "\nTHE PARAMETERS ENTERED ARE INCORRECT\nTRY AGAIN";
+	  goto A;
+	}
       if(!mysql_error())
 	{
 	  echo "\tconnected to the mysql server\n";
+	B:
 	  echo "ENTER THE DATABASE NAME:";
 	  $entered_db_name=trim(fgets($handle));
 	  echo "\nseeking connection to the database";
@@ -55,7 +50,13 @@ function functionpage($ifexception=0)
 	  $trial_connection_to_database=@mysql_select_db($entered_db_name);
 	  if(mysql_error())
 	    {
-	      echo "\t could not connect to the database\n";
+	      echo "\t could not connect to the database\n creating a new one";
+	   	      $createdb=mysql_query("CREATE DATABASE $entered_db_name");
+	      if(mysql_error())
+		{
+		  echo "\n some error encountered try again";
+		  goto B;
+		}
 	    }
 	  if(!mysql_error())
 	    {
@@ -68,6 +69,7 @@ function functionpage($ifexception=0)
 	  $trial_connection_error_encountered=mysql_error();
 	  echo "$trial_connection_error_encountered\n";
 	}
+    C:
       echo "\nENTER THE TABLE NAME:";
       $entered_table_name=trim(fgets($handle));
       echo "\ntrying to resolve tablename";
@@ -80,11 +82,36 @@ function functionpage($ifexception=0)
       $trying_the_table=@mysql_query("select * from $entered_table_name");
       if(mysql_error())
 	{
-	  echo "\t could not resolve table name\n";
+	  echo "\t creating a table\n";
+	  $tablecreate=
+"CREATE  TABLE  `test`.`$entered_table_name` (  `USERID` int( 3  )  NOT  NULL  AUTO_INCREMENT ,
+ `LOGINTIMESTAMP` text NOT  NULL ,
+ `LASTTIMESTAMP` text NOT  NULL ,
+ `LASTTIMESTAMPAUTHKEY` text NOT  NULL ,
+ `AUTHKEY` text NOT  NULL ,
+ `BASE` text NOT  NULL ,
+ `SALT` text NOT  NULL ,
+ `COOKIEEXPIRY` text NOT  NULL ,
+ `LOGGED` text NOT  NULL ,
+ `SESSIONID` text NOT  NULL ,
+ `NAME` text NOT  NULL ,
+ `PASSWORD` text NOT  NULL ,
+ `LOGOUTTIMESTAMP` text NOT  NULL ,
+ `TOTALLOGGEDTIME` text NOT  NULL ,
+ PRIMARY  KEY (  `USERID`  )  ) ENGINE  = InnoDB  DEFAULT CHARSET  = latin1;
+";
+
+$create_table=mysql_query($tablecreate);
+
+if(mysql_error())
+{
+echo "\nsome error occured try again\n";
+goto C;
+}
 	}
       if(!mysql_error())
 	{
-	  echo "\ttable name resolved\n";
+	  echo "\tcreated\n";
 	}
     }
   echo "\n ENTER THE COOKIE EXPIRY TIME";
@@ -99,13 +126,6 @@ function functionpage($ifexception=0)
   echo ".";
   sleep(1);
   echo ".";
-  sleep(1);
-  echo ".";
-  sleep(1);
-  echo ".";
-  sleep(1);
-  echo ".";
-  sleep(1);
   //write the details in a file
   $thefile="thesetupconfiguration.php";
   $filehandle=fopen($thefile,"w");
@@ -113,7 +133,7 @@ function functionpage($ifexception=0)
     {
       echo "\n\n\n\n\n\n\n----ERROR ENCOUNTERED ==----------\n\n\n";
     }
-  $thestringtowrite="<?php\n".'$SET_THEMYSLHOSTNAME'."=\"$entered_host_name\";".'$SET_THEMYSQLUSERNAME'."=\"$entered_mysql_username\";".'$SET_THEMYSQLPASSWORD'."=\"$entered_mysql_password\";".'$SET_THEMYSQLDBNAME'."=\"$entered_db_name\";".'$SET_THEMYSQLTABLENAME'."=\"$entered_table_name\;\n".'$SET_COOKIEEXPIRY'."=\"$cookieexpirytime\";?>";
+  $thestringtowrite="<?php\n".'$SET_THEMYSLHOSTNAME'."=\"$entered_host_name\";".'$SET_THEMYSQLUSERNAME'."=\"$entered_mysql_username\";".'$SET_THEMYSQLPASSWORD'."=\"$entered_mysql_password\";".'$SET_THEMYSQLDBNAME'."=\"$entered_db_name\";".'$SET_THEMYSQLTABLENAME'."=\"$entered_table_name\";".'$SET_COOKIEEXPIRY'."=\"$cookieexpirytime\";?>";
   $writtenstring=fwrite($filehandle,$thestringtowrite);
   $fileclosed=fclose($filehandle);;
   echo "FILE SUCCESSFULLY WROTE!!...NOW EXITING\n\n";
