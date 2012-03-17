@@ -1,3 +1,4 @@
+Restarting httpd (via systemctl):  [  OK  ]
 <?php
   /*
 SET_logout function does the following
