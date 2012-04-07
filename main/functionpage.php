@@ -84,7 +84,7 @@ function functionpage($ifexception=0)
 	{
 	  echo "\t creating a table\n";
 	  $tablecreate=
-"CREATE  TABLE  `test`.`$entered_table_name` (  `USERID` int( 3  )  NOT  NULL  AUTO_INCREMENT ,
+"CREATE  TABLE  `$entered_db_name`.`$entered_table_name` (  `USERID` int( 3  )  NOT  NULL  AUTO_INCREMENT ,
  `LOGINTIMESTAMP` text NOT  NULL ,
  `LASTTIMESTAMP` text NOT  NULL ,
  `LASTTIMESTAMPAUTHKEY` text NOT  NULL ,
@@ -102,7 +102,7 @@ function functionpage($ifexception=0)
 ";
 
 $create_table=mysql_query($tablecreate);
-
+echo mysql_error();
 if(mysql_error())
 {
 echo "\nsome error occured try again\n";
